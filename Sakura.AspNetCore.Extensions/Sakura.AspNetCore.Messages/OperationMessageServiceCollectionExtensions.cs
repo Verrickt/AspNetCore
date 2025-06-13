@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 ///     Provide extension method for add or configure the operation message service. This class is static.
 /// </summary>
 [PublicAPI]
-public static class OperatonMessageServiceCollectionExtensions
+public static class OperationMessageServiceCollectionExtensions
 {
 	/// <summary>
 	///     Add the operation message services to the specified service container.
@@ -21,14 +21,14 @@ public static class OperatonMessageServiceCollectionExtensions
 	/// <param name="configureOptions">A optional action for configure this service.</param>
 	/// <returns>The <paramref name="services" /> parameter.</returns>
 	/// <exception cref="ArgumentNullException"><paramref name="services" /> is <c>null</c>.</exception>
-	public static IServiceCollection AddOperationMessageAccessor([NotNull] this IServiceCollection services,
+	public static IServiceCollection AddOperationMessageAccessor(this IServiceCollection services,
 		Action<OperationMessageOptions>? configureOptions = null)
 	{
 		// Check argument
 		if (services == null)
 			throw new ArgumentNullException(nameof(services));
 
-		// Try add service
+		// Try to add service
 		services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		services.TryAddScoped<IOperationMessageAccessor, DefaultOperationMessageAccessor>();
 
@@ -50,8 +50,8 @@ public static class OperatonMessageServiceCollectionExtensions
 	///     Either <paramref name="services" /> or <paramref name="configureOptions" /> is
 	///     <c>null</c>.
 	/// </exception>
-	public static IServiceCollection ConfigureOperationMessages([NotNull] this IServiceCollection services,
-		[NotNull] Action<OperationMessageOptions> configureOptions)
+	public static IServiceCollection ConfigureOperationMessages(this IServiceCollection services,
+		Action<OperationMessageOptions> configureOptions)
 	{
 		// Check argument
 		if (services == null)

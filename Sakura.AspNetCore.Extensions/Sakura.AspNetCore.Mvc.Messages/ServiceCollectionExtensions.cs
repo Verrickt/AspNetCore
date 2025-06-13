@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sakura.AspNetCore;
 using Sakura.AspNetCore.Mvc;
+using Sakura.AspNetCore.Mvc.Implementations;
 
 // ReSharper disable once CheckNamespace
 
@@ -16,25 +17,14 @@ namespace Microsoft.Framework.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
 	/// <summary>
-	///     Add operation messages UI generation services.
-	/// </summary>
-	/// <param name="serviceCollection">The <see cref="IServiceCollection" /> object.</param>
-	public static void AddOperationMessageUIGenerators(this IServiceCollection serviceCollection)
-	{
-		serviceCollection
-			.TryAddSingleton<IOperationMessageLevelClassMapper, DefaultOperationMessageLevelClassMapper>();
-		serviceCollection.TryAddScoped<IOperationMessageHtmlGenerator, DefaultOperationMessageHtmlGenerator>();
-	}
-
-	/// <summary>
 	///     Add operation messages and all related services.
 	/// </summary>
-	/// <param name="serviceCollection">The <see cref="IServiceCollection" /> object.</param>
+	/// <param name="services">The <see cref="IServiceCollection" /> object.</param>
 	/// <param name="setupAction">Optional setup actions.</param>
-	public static void AddOperationMessages([NotNull] this IServiceCollection serviceCollection,
-		Action<OperationMessageOptions> setupAction = null)
+	public static OperationMessageServiceBuilder AddOperationMessages(this IServiceCollection services,
+		Action<OperationMessageOptions>? setupAction = null)
 	{
-		serviceCollection.AddOperationMessageAccessor(setupAction);
-		serviceCollection.AddOperationMessageUIGenerators();
+		services.AddOperationMessageAccessor(setupAction);
+		return new (services);
 	}
 }

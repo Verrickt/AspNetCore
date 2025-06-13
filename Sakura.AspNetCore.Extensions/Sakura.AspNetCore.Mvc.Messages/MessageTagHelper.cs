@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Sakura.AspNetCore.Mvc;
@@ -6,32 +7,17 @@ namespace Sakura.AspNetCore.Mvc;
 /// <summary>
 ///     Provide tag helper service for messages.
 /// </summary>
-[HtmlTargetElement("div", Attributes = MessageListAttributeName)]
-public class MessageTagHelper : TagHelper
+/// <param name="messageAccessor">The <see cref="IOperationMessageAccessor"/> service.</param>
+/// <param name="generator">The <see cref="IOperationMessageHtmlGenerator"/> service.</param>
+[HtmlTargetElement(TagName)]
+public class MessageTagHelper(IOperationMessageAccessor messageAccessor, IOperationMessageHtmlGenerator generator)
+	: TagHelper
 {
 	/// <summary>
-	///     Initialize a instance with required services.
-	/// </summary>
-	/// <param name="messageAccessor">The HTML generator service.</param>
-	/// <param name="generator">The message accessor service.</param>
-	[UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-	public MessageTagHelper(IOperationMessageAccessor messageAccessor, IOperationMessageHtmlGenerator generator)
-	{
-		MessageAccessor = messageAccessor;
-		Generator = generator;
-	}
-
-	/// <summary>
-	///     Get the message accessor service.
+	/// The tag name of this tag helper. This field is constant.
 	/// </summary>
 	[PublicAPI]
-	protected IOperationMessageAccessor MessageAccessor { get; }
-
-	/// <summary>
-	///     Get the HTML generator service.
-	/// </summary>
-	[PublicAPI]
-	protected IOperationMessageHtmlGenerator Generator { get; }
+	public const string TagName = "operation-message-list";
 
 	/// <summary>
 	///     Synchronously executes the <see cref="TagHelper" /> with the given <paramref name="context" /> and
@@ -41,39 +27,12 @@ public class MessageTagHelper : TagHelper
 	/// <param name="output">A stateful HTML element used to generate an HTML tag.</param>
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		// Get the message list
-		var messages = MessageAccessor.Messages;
+	// Generate the output
+		var tag = generator.GenerateList(messageAccessor.Messages, context);
 
-		// Generate the output
-		var tag = Generator.GenerateList(messages, ListStyle, UseTwoLine);
-
-		// Merge result
+		// Dismiss current tag
+		output.TagName = null;
+		// Append content
 		output.PostContent.AppendHtml(tag);
 	}
-
-	#region HTML bound fields and properties
-
-	/// <summary>
-	///     Get the attribute name for <see cref="ListStyle" /> property. This field is constant.
-	/// </summary>
-	[PublicAPI] public const string MessageListAttributeName = "asp-message-list";
-
-	/// <summary>
-	///     Get the attribute name for <see cref="UseTwoLine" /> property. This field is constant.
-	/// </summary>
-	[PublicAPI] public const string MessageListUseTwoLineAttributeName = "asp-message-list-use-two-line";
-
-	/// <summary>
-	///     Get or set the message list style.
-	/// </summary>
-	[HtmlAttributeName(MessageListAttributeName)]
-	public MessageListStyle ListStyle { get; set; } = MessageListStyle.AlertDialog;
-
-	/// <summary>
-	///     Get or set a value that indicate if each message should use two line mode.
-	/// </summary>
-	[HtmlAttributeName(MessageListUseTwoLineAttributeName)]
-	public bool UseTwoLine { get; set; } = false;
-
-	#endregion
 }
