@@ -68,13 +68,13 @@ Please note that [`SessionStateTempDataProvider`](https://learn.microsoft.com/en
 -------
 
 Example  
-1. Add `Sakura.AspNetCore.Messages` and `Sakura.AspNetCore.Mvc.Messages` package(`Sakura.AspNetCore.Messages.Abstractions` is used implicitly):
+1. Add `Sakura.AspNetCore.Messages` and `Sakura.AspNetCore.TempDataExtensions` packages (`Sakura.AspNetCore.Messages.Abstractions` and `Sakura.AspNetCore.Messages` are used implicitly):
 ``` powershell
 dotnet add package Sakura.AspNetCore.Mvc.Messages
 dotnet add package Sakura.AspNetCore.Mvc.TempDataExtensions
 ```
 
-2. Install [Bootstrap Icons](https://icons.getbootstrap.com/#install) for the `BootstrapIconMapper`.
+1. Install [Bootstrap Icons](https://icons.getbootstrap.com/#install) for the `BootstrapIconMapper`.
 Please refer to the [official documentation](https://icons.getbootstrap.com/#install) on how to install Bootstrap Icons
 
 
