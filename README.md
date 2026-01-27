@@ -43,7 +43,7 @@ This project provides the `EnhancedSessionStateTempDataProvider` service provide
 
 ### ASP.NET Core MVC Messages Packages
 
-*Nuget Packages: 
+*Nuget Packages*: 
 - *`Sakura.AspNetCore.Messages.Abstractions`*
 - *`Sakura.AspNetCore.Messages`*
 - *`Sakura.AspNetCore.Mvc.Messages`*
